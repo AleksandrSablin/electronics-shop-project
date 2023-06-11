@@ -1,3 +1,7 @@
+import os.path
+from csv import DictReader
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -13,10 +17,21 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
         self.all.append(self)
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        if len(value) <= 10:
+            self.__name = value
+        else:
+            raise Exception("Длина наименования товара превышает 10 символов")
 
     def calculate_total_price(self) -> float:
         """
@@ -31,3 +46,23 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= self.pay_rate
+
+    @classmethod
+    def instantiate_from_csv(cls):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        dir_path = dir_path + '/items.csv'
+        cls.all.clear()
+        with open(dir_path, encoding="utf-8") as f:
+            file = DictReader(f)
+            for item in file:
+                name = item["name"]
+                price = item["price"]
+                quantity = item["quantity"]
+                cls(name, float(price), int(quantity))
+
+    @staticmethod
+    def string_to_number(line):
+        """метод, возвращающий число из числа-строки"""
+        a = float(line)
+        return int(a)
+
