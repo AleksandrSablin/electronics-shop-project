@@ -37,3 +37,9 @@ def test_apply_discount():
     assert Item.string_to_number('5') == 5
     assert Item.string_to_number('5.0') == 5
     assert Item.string_to_number('5.5') == 5
+
+    # Проверяем магический метод __repr__
+    assert repr(item) == "Item('Смартфон', 8000.0, 20)"
+
+    # Проверяем магический метод __str__
+    assert str(item) == 'Смартфон'
